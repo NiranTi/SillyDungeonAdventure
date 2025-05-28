@@ -1,76 +1,104 @@
+#include "Karakter.h"
 #include <iostream>
-#include <string>
+#include <algorithm> // Untuk std::max
 
-using namespace std;
-
-const int MAX_KARAKTERS = 10;
-
-struct Karakter{
-   string name;
-   int HP;
-   int ATK;
-   int SPEED;
-   int DEF;
-};
-
-void displayKarakter(const Karakter& karakter){
-   cout << "Nama : " << karakter.name << endl;
-   cout << "HP: " << karakter.HP << endl;
-   cout << "ATK: " << karakter.ATK << endl;
-   cout << "SPEED: " << karakter.SPEED << endl;
-   cout << "DEF: " << karakter.DEF << endl;
+// ========================
+// IMPLEMENTASI STRUCT KARAKTER
+// ========================
+bool Karakter::isAlive() const {
+    return HP > 0;
 }
 
-void initKarakter(Karakter karakters[]){
-   karakters[0] = {"zara", 82, 120, 70, 35};
-   karakters[1] = {"gerald", 90, 100, 30, 5};
-   karakters[2] = {"robin", 60, 50, 49, 9};
-   karakters[3] = {"merlin", 99, 105, 80, 14};
-   karakters[4] = {"robert", 43, 87, 45, 8};
-   karakters[5] = {"hans", 67, 90, 93, 10};
-   karakters[6] = {"sam", 76, 74, 87, 24};
-   karakters[7] = {"lia", 91, 80, 55, 13};
-   karakters[8] = {"tyla", 85, 94, 45, 12};
-   karakters[9] = {"max", 90, 83, 79, 15};
+void Karakter::takeDamage(int damage) {
+    int actualDamage = std::max(0, damage - DEF);
+    HP -= actualDamage;
+    if (HP < 0) {
+        HP = 0;
+    }
+    std::cout << name << " menerima " << actualDamage << " damage. HP tersisa: " << HP << std::endl;
 }
 
-void pilihKarakter(Karakter karakters[],Karakter& pilihan){
-   string inputName;
-   bool ditemukan = false;
+// ========================
+// IMPLEMENTASI BST UNTUK PENGURUTAN SPEED
+// ========================
+BSTNode::BSTNode(const Karakter& kar) : character(kar), left(nullptr), right(nullptr) {}
 
-   while (!ditemukan){
-   cout << "\n===== Pilih Karakter yang anda inginkan =====\n";
-   cout << "Daftar karakter: \n"; 
-
-   for (int i = 0; i < MAX_KARAKTERS; i++){
-      cout << "-" << karakters[i].name << " (" << karakters[i].HP << ")(" << karakters[i].ATK << ")(" <<karakters[i].SPEED << ")(" << karakters[i].DEF << ")\n";
-   }
-
-   cout << "Masukan nama karakter yang anda pilih: ";
-   getline(cin, inputName);
-
-   for (int i = 0; i < MAX_KARAKTERS; i++){
-      if (karakters[i].name== inputName){
-         pilihan = karakters[i];
-         ditemukan = true;
-         break;
-      }
-   }
-   if (!ditemukan){
-      cout << "karakter dengan nama " << inputName << " tidak ditemukan\n";
-   }
-   }
+BSTNode::~BSTNode() {
+    delete left;
+    delete right;
 }
 
-int main(){
-   Karakter karakters[MAX_KARAKTERS];
-   Karakter karakterPilihan;
+SpeedTree::SpeedTree() : root(nullptr) {}
 
-   initKarakter(karakters);
-   pilihKarakter(karakters, karakterPilihan);
+SpeedTree::~SpeedTree() {
+    delete root;
+}
 
-   cout << "\n Karakter yang anda pilih\n" ;
-   displayKarakter(karakterPilihan);
+void SpeedTree::insert(const Karakter& character) {
+    if (!root) {
+        root = new BSTNode(character);
+    } else {
+        _insertRecursive(root, character);
+    }
+}
 
-   return 0;
+void SpeedTree::_insertRecursive(BSTNode* node, const Karakter& character) {
+    if (character.SPEED < node->character.SPEED) {
+        if (node->left == nullptr) {
+            node->left = new BSTNode(character);
+        } else {
+            _insertRecursive(node->left, character);
+        }
+    } else {
+        if (node->right == nullptr) {
+            node->right = new BSTNode(character);
+        } else {
+            _insertRecursive(node->right, character);
+        }
+    }
+}
+
+std::vector<Karakter> SpeedTree::getCharactersBySpeedDescending() const {
+    std::vector<Karakter> characters;
+    _reverseInOrderTraversal(root, characters);
+    return characters;
+}
+
+void SpeedTree::_reverseInOrderTraversal(BSTNode* node, std::vector<Karakter>& characters) const {
+    if (node) {
+        _reverseInOrderTraversal(node->right, characters);
+        characters.push_back(node->character);
+        _reverseInOrderTraversal(node->left, characters);
+    }
+}
+
+// ========================
+// IMPLEMENTASI QUEUE UNTUK SERANGAN MUSUH
+// ========================
+AttackInfo::AttackInfo(Karakter* att, Karakter* tar, int dmg) : attacker(att), target(tar), damage(dmg) {}
+
+void AttackQueue::addAttack(Karakter* attacker, Karakter* target, int damage) {
+    q.push(AttackInfo(attacker, target, damage));
+    std::cout << "[QUEUE] " << attacker->name << " menambahkan serangan ke " << target->name << " sebesar " << damage << " ke antrean." << std::endl;
+}
+
+void AttackQueue::processNextAttack() {
+    if (!isEmpty()) {
+        AttackInfo info = q.front();
+        q.pop();
+        if (info.attacker->isAlive() && info.target->isAlive()) {
+            std::cout << "[MEMPROSES SERANGAN] " << info.attacker->name << " menyerang " << info.target->name << "!" << std::endl;
+            info.target->takeDamage(info.damage);
+        } else {
+            std::cout << "[MEMPROSES SERANGAN] Serangan dari " << info.attacker->name << " ke " << info.target->name << " dibatalkan (salah satu sudah kalah)." << std::endl;
+        }
+    }
+}
+
+bool AttackQueue::isEmpty() const {
+    return q.empty();
+}
+
+size_t AttackQueue::size() const {
+    return q.size();
 }

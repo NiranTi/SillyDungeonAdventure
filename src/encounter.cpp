@@ -1,4 +1,5 @@
 #include "ui.hpp"
+#include "utils.hpp"
 #include "battle.hpp"
 #include "karakter.hpp"
 #include "inventory.hpp"

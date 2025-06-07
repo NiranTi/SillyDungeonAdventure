@@ -5,6 +5,7 @@
 #include <chrono>
 #include <random>
 #include <cstdlib>
+#include <limits>
 #include "karakter.hpp"
 #include "turnOrder.hpp"
 #include "ui.hpp"
@@ -67,7 +68,7 @@ BattleResult startBattle(Character team[], int teamSize, enemies& enemy, vector<
 
             int action = -1;
             while (true) {
-                cout << team[i].name << ", choose action (0: FIGHT, 1: CHECK, 2: ITEM, 3: RUN): ";
+                cout << team[i].name << ", choose action (0: FIGHT, 1: ACT, 2: ITEM, 3: RUN): ";
                 action = getValidIntegerInput();
                 if (action >= 0 && action <= 3) break;
                 cout << "Invalid action. Please choose again.\n";
@@ -113,69 +114,112 @@ BattleResult startBattle(Character team[], int teamSize, enemies& enemy, vector<
 
                 switch (chosenAction) {
                     case 0: { // FIGHT
-                        int dmg = calculateDamage(current.atk, enemy.defense);
-                        enemy.hp -= dmg;
-                        cout << current.name << " attacks " << enemy.name << " for " << dmg << " damage!" << endl;
-                        blinkText(enemy.name);
-                        break;
+                        if (team[teamIdx].hp<= 0) {
+                            cout << team[teamIdx].name << " fainted before taking action!\n";
+                            continue;
+                        } else {
+                            int dmg = calculateDamage(current.atk, enemy.defense);
+                            enemy.hp -= dmg;
+                            cout << current.name << " attacks " << enemy.name << " for " << dmg << " damage!" << endl;
+                            blinkText(enemy.name);
+                            break;
+                        }
                     }
-                    case 1: { // CHECK
-                        cout << "[CHECK] " << enemy.name << " - HP: " << enemy.hp << "/" << enemy.maxHP
-                            << ", ATK: " << enemy.atk << ", DEF: " << enemy.defense << endl;
-                        pause();
-                        break;
+                    case 1: {
+                        if (team[teamIdx].hp<= 0) {
+                            cout << team[teamIdx].name << " fainted before taking action!\n";
+                            continue;
+                        } else {
+                            cout << team[teamIdx].name << " choose ACT:\n";
+                            cout << "1: CHECK\n";
+                            cout << "2: DISPEL\n";
+                            int subchoice = getValidIntegerInput();
+                            if (subchoice == 1) {
+                                cout << "[CHECK] " << enemy.name << " - HP: " << enemy.hp << "/" << enemy.maxHP
+                                    << ", ATK: " << enemy.atk << ", DEF: " << enemy.defense << endl;
+                            } else if (subchoice == 2) {
+                                if (!team[teamIdx].debuffs.empty()) {
+                                    DebuffEffect removed = team[teamIdx].debuffs.front();
+                                    team[teamIdx].debuffs.pop();
+                                    cout << team[teamIdx].name; typeText(" dispelled defense down effect.\n",30);
+                                } else {cout << "No debuffs to dispel!\n";}
+                            }
+                            pause();
+                            break;
+                        }
                     }
                     case 2: {
-                        displayInventory(inventory);
-                        int itemIndex = -1;
-                        if (!isEmpty(inventory)) {
-                            while (true) {
-                                cout << "Choose item index: ";
-                                itemIndex = getValidIntegerInput();
-                                if (itemIndex >= 0 && itemIndex < inventory.size()) break;
-                                cout << "Invalid item index. Try again.\n";
-                            }
-
-                            string chosenItem = inventory[itemIndex];
-
-                            // Pilih target
-                            int targetIndex = -1;
-                            while (true) {
-                                cout << "Choose target:\n";
-                                for (int i = 0; i < teamSize; ++i) {
-                                    if (team[i].hp > 0)
-                                        cout << i << ": " << team[i].name << " (HP: " << team[i].hp << "/" << team[i].maxHP << ")\n";
+                        if (team[teamIdx].hp<= 0) {
+                            cout << team[teamIdx].name << " fainted before taking action!\n";
+                            continue;
+                        } else {
+                            displayInventory(inventory);
+                            int itemIndex = -1;
+                            if (!isEmpty(inventory)) {
+                                while (true) {
+                                    cout << "Choose item index: ";
+                                    itemIndex = getValidIntegerInput();
+                                    if (itemIndex >= 0 && itemIndex < inventory.size()) break;
+                                    cout << "Invalid item index. Try again.\n";
                                 }
 
-                                targetIndex = getValidIntegerInput();
-                                if (targetIndex >= 0 && targetIndex < teamSize && team[targetIndex].hp > 0) break;
+                                string chosenItem = inventory[itemIndex];
 
-                                cout << "Invalid target. Try again.\n";
-                            }
+                                // Pilih target
+                                int targetIndex = -1;
+                                while (true) {
+                                    cout << "Choose target:\n";
+                                    for (int i = 0; i < teamSize; ++i) {
+                                        if (team[i].hp > 0)
+                                            cout << i << ": " << team[i].name << " (HP: " << team[i].hp << "/" << team[i].maxHP << ")\n";
+                                    }
 
-                            // Gunakan item
-                            bool success = useItem(inventory, chosenItem, team[targetIndex]);
-                            if (success) {
-                                cout << "Used " << chosenItem << " on " << team[targetIndex].name << "!\n";
-                            }
-                            break;
-                        } break;                    
+                                    targetIndex = getValidIntegerInput();
+                                    if (targetIndex >= 0 && targetIndex < teamSize && team[targetIndex].hp > 0) break;
+
+                                    cout << "Invalid target. Try again.\n";
+                                }
+
+                                // Gunakan item
+                                bool success = useItem(inventory, chosenItem, team[targetIndex]);
+                                if (success) {
+                                    cout << "Used " << chosenItem << " on " << team[targetIndex].name << "!\n";
+                                }
+                                break;
+                            } break;
+                        };
                     }
                     case 3: {
-                        if (enemy.name != "Boss Enemy") {
-                            if (tryToRun()) {
-                                cout << current.name << " tried to run... Success!\n";
-                                escaped = true;
-                                battleOngoing = false;
-                                break;
-                            } else {
-                                cout << current.name << " tried to run... but failed!\n";
-                            }
-                        } else {typeText("You can't run from the boss!", 30);}
-                        break;
+                        if (team[teamIdx].hp<= 0) {
+                            cout << team[teamIdx].name << " fainted before taking action!\n";
+                            continue;
+                        } else {
+                            if (enemy.name != "Boss Enemy") {
+                                if (tryToRun()) {
+                                    cout << current.name << " tried to run... Success!\n";
+                                    escaped = true;
+                                    battleOngoing = false;
+                                    break;
+                                } else {
+                                    cout << current.name << " tried to run... but failed!\n";
+                                }
+                            } else {typeText("You can't run from the boss!", 30);}
+                            break;
+                        }
                     }
                 }
             } else {
+                int effectiveDef = current.def;
+                queue<DebuffEffect> temp = current.debuffs;
+                while (!temp.empty()) {
+                    DebuffEffect debuff = temp.front();
+                    temp.pop();
+
+                    if (debuff.type == "DEFENSE_DOWN") {
+                        effectiveDef += debuff.value;
+                    }
+                }
+
                 // Enemy attacks random alive character
                 vector<Character*> alive;
                 for (int i = 0; i < teamSize; ++i)
@@ -183,10 +227,17 @@ BattleResult startBattle(Character team[], int teamSize, enemies& enemy, vector<
 
                 if (!alive.empty()) {
                     Character* target = alive[rand() % alive.size()];
-                    int dmg = calculateDamage(current.atk, target->def);
+                    int dmg = calculateDamage(current.atk, effectiveDef);
                     target->hp -= dmg;
+                    if (target->hp < 0) target->hp = 0;
                     cout << current.name << " attacks " << target->name << " for " << dmg << " damage!" << endl;
                     blinkText(target->name);
+
+                    if (rand() % 2 == 0) {
+                        int value = rand();
+                        target->debuffs.push(DebuffEffect("DEFENSE_DOWN", -5));
+                        cout << target->name << " is afflicted with DEFENSE DOWN!\n";
+                    }
                 }
             }
 

@@ -3,6 +3,8 @@
 
 #include <string>
 
+void clearScreen();
+void pause();
 int getValidIntegerInput();
 std::string getValidStringInput();
 

@@ -1,4 +1,5 @@
 #include "ui.hpp"
+#include "utils.hpp"
 #include "encounter.hpp"
 #include "karakter.hpp"
 #include <thread>
@@ -6,18 +7,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
 
 using namespace std;
-
-void clearScreen() {
-    system("cls");
-}
-
-void pause() {
-    cout << "\n(Press Enter to continue...)";
-    cin.ignore();
-    cin.get();
-}
 
 string colorText(const std::string& text, const std::string& color, const std::string& bgColor) {
     string code = "\033[";

@@ -2,9 +2,17 @@
 #define KARAKTER_HPP
 
 #include <string>
+#include <queue>
 
 #define TEAM_SIZE 3
 #define CHARACTER_COUNT 10
+
+struct DebuffEffect {
+    std::string type;
+    int value;
+
+    DebuffEffect(std::string t, int v) : type(t), value(v) {}
+};
 
 struct Character {
     std::string name;
@@ -13,6 +21,8 @@ struct Character {
     int atk;
     int def;
     int speed;
+
+    std::queue<DebuffEffect> debuffs;
 };
 
 void displayCharacters(bool chosen[10]);

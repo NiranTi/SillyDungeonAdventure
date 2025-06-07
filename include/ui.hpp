@@ -4,8 +4,6 @@
 #include <string>
 #include "karakter.hpp"
 
-void clearScreen();
-void pause();
 std::string colorText(const std::string& text, const std::string& color, const std::string& bgColor = "");
 void printTitle(const std::string& title);
 void highlightTurn(const std::string& name);

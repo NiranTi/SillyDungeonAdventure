@@ -13,16 +13,17 @@ using namespace std;
 void FiturTelusuriDungeon() {
     clearScreen();
     printTitle("SILLY DUNGEON ADVENTURE");
+    int delay = 20;
 
     cout << colorText("", "green") << flush;
-    typeText("Amidst stormy seas and a sky heavy with clouds...", 35);
-    typeText("The Flying Dutchman sails toward an island not found on any map.", 35);
-    typeText("According to an ancient book, a legendary treasure lies hidden in a deep, dark dungeon.", 35);
-    typeText("Guarded by monsters... and sealed away from the world.", 35);
-    typeText("\nAt last, the ship reaches the island.", 35);
-    typeText("Captain Dutchman and his crew descend into a dense jungle.", 35);
-    typeText("At the edge of the jungle stands a massive stone door.", 35);
-    typeText("It leads into darkness, into danger, into destiny...", 35);
+    typeText("Amidst stormy seas and a sky heavy with clouds...", delay);
+    typeText("The Flying Dutchman sails toward an island not found on any map.", delay);
+    typeText("According to an ancient book, a legendary treasure lies hidden in a deep, dark dungeon.", delay);
+    typeText("Guarded by monsters... and sealed away from the world.", delay);
+    typeText("\nAt last, the ship reaches the island.", delay);
+    typeText("Captain Dutchman and his crew descend into a dense jungle.", delay);
+    typeText("At the edge of the jungle stands a massive stone door.", delay);
+    typeText("It leads into darkness, into danger, into destiny...", delay);
     cout << "\033[0m";
     pause();
 }

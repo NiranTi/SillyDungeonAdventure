@@ -3,19 +3,26 @@
 #include "ui.hpp"
 using namespace std;
 
+void clearScreen() {
+    system("cls");
+}
+
+void pause() {
+    cout << "Press Enter to continue...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // flush buffer
+    cin.get(); // tunggu enter
+}
+
 int getValidIntegerInput() {
     int input;
     while (true) {
         cout << "> ";
-        cin >> input;
-
-        if (cin.fail()) {
+        if (cin >> input) {
+            return input;
+        } else {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             typeText("Please enter a valid integer!", 20);
-        } else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clean extra chars
-            return input;
         }
     }
 }

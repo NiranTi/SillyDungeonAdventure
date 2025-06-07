@@ -23,7 +23,7 @@ Character characters[CHARACTER_COUNT] = {
 
 void displayCharacters(bool selected[]) {
     const int perRow = 5;
-    const int columnWidth = 35;
+    const int columnWidth = 15;
 
     for (int rowStart = 0; rowStart < CHARACTER_COUNT; rowStart += perRow) {
         int rowEnd = min(rowStart + perRow, CHARACTER_COUNT);

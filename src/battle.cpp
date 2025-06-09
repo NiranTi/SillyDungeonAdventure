@@ -61,21 +61,36 @@ BattleResult startBattle(Character team[], int teamSize, enemies& enemy, vector<
         vector<Action> plannedActions;
 
         cout << "=== ACTION SELECTION PHASE ===" << endl;
-        for (int i = 0; i < teamSize; ++i) {
-            if (team[i].hp <= 0) continue;
-
-            printBattleUI(team, teamSize, i, enemy.name, enemy.hp, enemy.maxHP);
-
-            int action = -1;
-            while (true) {
-                cout << team[i].name << ", choose action (0: FIGHT, 1: ACT, 2: ITEM, 3: RUN): ";
-                action = getValidIntegerInput();
-                if (action >= 0 && action <= 3) break;
-                cout << "Invalid action. Please choose again.\n";
+        int i = 0;
+        while (i < teamSize) {
+            if (team[i].hp <= 0) {
+            ++i;
+            continue;
             }
 
+        printBattleUI(team, teamSize, i, enemy.name, enemy.hp, enemy.maxHP);
+
+        cout << team[i].name << ", choose action:\n";
+        cout << "0: FIGHT\n1: ACT\n2: ITEM\n3: RUN\n4: UNDO last action\n";
+
+        int action = getValidIntegerInput();
+
+        if (action >= 0 && action <= 3) {
             plannedActions.push_back({ team[i].name, action });
+            ++i;
+        } else if (action == 4) {
+        if (!plannedActions.empty() && i > 0) {
+            plannedActions.pop_back();
+            --i;
+            cout << "Undoing action for " << team[i].name << ".\n";
+        } else {
+            cout << "Nothing to undo.\n";
         }
+        } else {
+        cout << "Invalid action. Please choose again.\n";
+        }
+        }
+
 
         // Bangun binary tree berdasarkan speed
         TreeNode* root = nullptr;

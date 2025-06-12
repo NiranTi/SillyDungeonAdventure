@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <conio.h> 
 
 using namespace std;
 
@@ -33,43 +34,45 @@ void ArahDungeon(Character team[], int teamSize, vector<string>& inventory) {
     printTitle("DUNGEON EXPLORATION");
 
     int round = 1;
-    string input;
 
     while (true) {
         cout << colorText("\nChoose your direction.", "cyan") << endl;
-        cout << "Type " << colorText("'F'", "yellow") << " to go Forward, "
-             << colorText("'L'", "yellow") << " to go Left, "
-             << colorText("'R'", "yellow") << " to go Right, or "
-             << colorText("'Q'", "red") << " to Quit.\n";
+        cout << "Type " << colorText("'W'", "yellow") << " to go Forward, "
+             << colorText("'A'", "yellow") << " to go Left, "
+             << colorText("'S'", "yellow") << " to go Backward, "
+             << colorText("'D'", "yellow") << " to go Right, or "
+             << colorText("'Q'", "red") << " to Quit." << endl;
 
-        input = getValidStringInput();
+        cout << "> ";
+        char input = tolower(getch());  // input real-time (tanpa Enter)
+        cout << input << endl;          // tampilkan input setelah '>'
 
-        // convert to lowercase for simplicity
-        for (auto& c : input) c = tolower(c);
-
-        if (input == "q") {
+        if (input == 'q') {
             clearScreen();
             typeText("You decide to retreat... for now.", 30);
             break;
-        } else if (input == "f") {
+        } else if (input == 'w') {
             clearScreen();
             typeText("You move forward. The darkness thickens...", 30);
-            encounterPercentage(round, team,inventory);
-        } else if (input == "l") {
+            encounterPercentage(round, team, inventory);
+        } else if (input == 'a') {
             clearScreen();
             typeText("You take a left. Faint whispers echo from the walls...", 30);
-            encounterPercentage(round, team,inventory);
-        } else if (input == "r") {
+            encounterPercentage(round, team, inventory);
+        } else if (input == 's') {
+            clearScreen();
+            typeText("You slowly step back, unsure of what lies behind...", 30);
+            encounterPercentage(round, team, inventory);
+        } else if (input == 'd') {
             clearScreen();
             typeText("You turn right. The air grows colder...", 30);
             encounterPercentage(round, team, inventory);
         } else {
             clearScreen();
             typeText("That direction makes no sense here.", 20);
-            continue;
         }
 
-        round++;  // Round naik setelah langkah valid
+        round++;
         pause();
         clearScreen();
     }

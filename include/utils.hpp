@@ -7,5 +7,6 @@ void clearScreen();
 void pause();
 int getValidIntegerInput();
 std::string getValidStringInput();
+void wait();
 
 #endif

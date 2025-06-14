@@ -1,5 +1,8 @@
 #include <iostream>
 #include <limits>
+#include <thread>
+#include <chrono>
+#include <future> 
 #include "ui.hpp"
 using namespace std;
 
@@ -41,4 +44,13 @@ string getValidStringInput() {
     }
 }
 
+void wait() {
+    cout << "Continuing in 5 seconds";
+    cout.flush();
+    for (int i = 0; i < 5; ++i) {
+        this_thread::sleep_for(chrono::seconds(1));
+        cout << "." << flush;
+    }
+    cout << "\n";
+}
 

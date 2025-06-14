@@ -73,7 +73,7 @@ void ArahDungeon(Character team[], int teamSize, vector<string>& inventory) {
         }
 
         round++;
-        pause();
+        wait();
         clearScreen();
     }
 }

@@ -1,32 +1,15 @@
-#include<iostream>
-#include<string>
-#include<unordered_map>
+#include <iostream>
+#include <string>
+#include <chrono>
+#include "login.hpp"
+#include "ui.hpp"
+#include "session.hpp"
 
 using namespace std;
+using namespace std::chrono;
 
-int main(){
-    unordered_map <string, string>userDatabase={
-        {"player 1", "pass123"},
-        {"admin", "adminpass"},
-        {"geust", "geustpass"},
-    };
-
-    string username;
-    string password;
-
-    cout << "===Game Login===\n";
-
-    cout << "Username: ";
-    getline(cin, username);
-
-    cout << "Password: ";
-    getline(cin, password);
-
-    auto it = userDatabase.find(username);
-    if (it != userDatabase.end() && it->second == password){
-        cout << "Login Seccessful! Welcome, " << username << ".\n";
-    }else{
-        cout << "Login failed. Incorrent in username or password";
-    }
-    return 0;
+void login() {
+    typeText("Enter your name: ",20);
+    getline(cin, playerName); // make sure to use getline for spaces
+    startTime = steady_clock::now();
 }

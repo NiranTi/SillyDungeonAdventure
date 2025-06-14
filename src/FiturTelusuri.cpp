@@ -39,7 +39,6 @@ void ArahDungeon(Character team[], int teamSize, vector<string>& inventory) {
         cout << colorText("\nChoose your direction.", "cyan") << endl;
         cout << "Type " << colorText("'W'", "yellow") << " to go Forward, "
              << colorText("'A'", "yellow") << " to go Left, "
-             << colorText("'S'", "yellow") << " to go Backward, "
              << colorText("'D'", "yellow") << " to go Right, or "
              << colorText("'Q'", "red") << " to Quit." << endl;
 
@@ -58,10 +57,6 @@ void ArahDungeon(Character team[], int teamSize, vector<string>& inventory) {
         } else if (input == 'a') {
             clearScreen();
             typeText("You take a left. Faint whispers echo from the walls...", 30);
-            encounterPercentage(round, team, inventory);
-        } else if (input == 's') {
-            clearScreen();
-            typeText("You slowly step back, unsure of what lies behind...", 30);
             encounterPercentage(round, team, inventory);
         } else if (input == 'd') {
             clearScreen();

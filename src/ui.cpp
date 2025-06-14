@@ -59,7 +59,7 @@ void highlightTurn(const string& name) {
 }
 
 void printDivider() {
-    cout << colorText("--------------------------------------------", "magenta") << "\n";
+    cout << colorText("------------------------------------------------------", "magenta") << "\n";
 }
 
 string repeat(const std::string& ch, int count) {
@@ -97,13 +97,14 @@ void printBattleUI(const Character team[], int teamSize, int activeIndex, const 
     printDivider();
 
     // Menu aktif karakter
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 5; ++i) {
         string option;
         switch (i) {
             case 0: option = "FIGHT"; break;
             case 1: option = "ACT"; break;
             case 2: option = "ITEM"; break;
             case 3: option = "RUN"; break;
+            case 4: option = "UNDO"; break;
         }
         if (i == 0) cout << "| ";  // awal baris
         cout << colorText("  " + option + "  ", (activeIndex == 0 ? "yellow" : "white")) << " | ";

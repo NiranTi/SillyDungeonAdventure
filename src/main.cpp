@@ -1,6 +1,10 @@
 #include "karakter.hpp"
 #include "ui.hpp"
 #include "FiturTelusuri.hpp"
+#include "battle.hpp"
+#include "encounter.hpp"
+#include "leaderboard.hpp"
+#include "login.hpp"
 #include "utils.hpp"
 #include "inventory.hpp"
 #include <iostream>
@@ -11,6 +15,7 @@ using namespace std;
 
 int main() {
     while (true) {
+        login();
         Character team[3];
         vector<string> inventory;
 
@@ -25,7 +30,8 @@ int main() {
                 clearScreen();
                 FiturTelusuriDungeon(); // Cutscene
                 ArahDungeon(team, TEAM_SIZE, inventory);
-
+                
+                displayLeaderboard();
                 cout << "\nPlay Again?(Y/N) ";
                 string choose = getValidStringInput();
                 while (true) {

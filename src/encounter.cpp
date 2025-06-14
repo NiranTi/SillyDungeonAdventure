@@ -1,6 +1,7 @@
 #include "ui.hpp"
 #include "utils.hpp"
 #include "battle.hpp"
+#include "leaderboard.hpp"
 #include "karakter.hpp"
 #include "inventory.hpp"
 #include <iostream>
@@ -52,21 +53,28 @@ void encounterPercentage(int round, Character team[], vector<string>& inventory)
         }
     }
     if (result == PLAYER_WIN) {
+        saveToLeaderboard(true);
         clearScreen();
         typeText("\nYOU WIN!\n", 30);
-        typeText("Captain Dutchman and his crew bravely conquered the dungeon’s dangers.", 30);
+        typeText("Captain Dutchman and his crew bravely conquered the dungeon dangers.", 30);
         typeText("They discovered the legendary treasure, breaking the ancient curse.", 30);
         typeText("The Flying Dutchman sails free once more, its sails full of hope and promise.", 30);
         typeText("Their names will be remembered for ages as legends of the sea.", 30);
+        cout<<"/n";
+        displayLeaderboard();
         exit(0);
     }
     else if (result == PLAYER_LOSE) {
+        saveToLeaderboard(false);
+
         clearScreen();
         typeText("\nGAME OVER\n", 30);
-        typeText("Despite the crew’s courage, the monsters claimed the dungeon.", 30);
+        typeText("Despite the crews courage, the monsters claimed the dungeon.", 30);
         typeText("The treasure remains hidden, and the curse holds strong.", 30);
         typeText("The Flying Dutchman drifts lost, a ghost story whispered by sailors.", 30);
         typeText("Their fates sealed in darkness, a warning to all who dare to seek it.", 30);
+        cout<<"/n";
+        displayLeaderboard();
         exit(0);
     }
 }

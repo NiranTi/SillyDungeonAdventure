@@ -18,4 +18,5 @@ struct enemies {
 void encounterPercentage(int round, Character team[], std::vector<std::string>& inventory);
 
 
+
 #endif

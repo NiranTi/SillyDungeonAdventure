@@ -18,6 +18,7 @@ void encounterPercentage(int round, Character team[], vector<string>& inventory)
 
     if (round == 10) {
         cout << colorText("BOSS FIGHT!\n\n", "red");
+        pause();
         result = startBattle(team, TEAM_SIZE, boss,inventory);
     }
     else {
@@ -25,10 +26,12 @@ void encounterPercentage(int round, Character team[], vector<string>& inventory)
 
         if (check == 1 || check == 4 || check == 7) {
             cout << colorText("ROOKIE ENEMY ENCOUNTERED!\n\n", "green");
+            pause();
             result = startBattle(team, TEAM_SIZE, rookie, inventory);
         }
         else if (check == 2 || check == 6) {
             cout << colorText("MID ENEMY ENCOUNTERED!\n\n", "yellow");
+            pause();
             result = startBattle(team, TEAM_SIZE, mid, inventory);
         }
         else if (check == 3 || check == 9) {

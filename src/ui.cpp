@@ -101,7 +101,7 @@ void printBattleUI(const Character team[], int teamSize, int activeIndex, const 
         string option;
         switch (i) {
             case 0: option = "FIGHT"; break;
-            case 1: option = "CHECK"; break;
+            case 1: option = "ACT"; break;
             case 2: option = "ITEM"; break;
             case 3: option = "RUN"; break;
         }

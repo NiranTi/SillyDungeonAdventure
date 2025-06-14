@@ -282,6 +282,7 @@ BattleResult startBattle(Character team[], int teamSize, enemies& enemy, vector<
             this_thread::sleep_for(chrono::milliseconds(500));
         }
         deleteTree(root);
+        pause();
     }
     return PLAYER_ESCAPED;
 }

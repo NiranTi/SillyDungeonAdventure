@@ -23,6 +23,8 @@ void saveToLeaderboard(bool cleared) {
     }
 }
 
+#include <iomanip> 
+
 void displayLeaderboard() {
     ifstream file("leaderboard.csv");
     if (!file.is_open()) {
@@ -30,15 +32,20 @@ void displayLeaderboard() {
         return;
     }
 
-    cout << "\n=========== Leaderboard ===========\n";
-    cout << "Name\t\tResult\t\tTime (s)\n";
+    cout << "\n============ Leaderboard ============\n";
+    cout << left << setw(15) << "Name"
+         << setw(12) << "Result"
+         << setw(10) << "Time (s)" << endl;
     cout << "-------------------------------------\n";
 
     string name, result, time;
     while (getline(file, name, ',')) {
         getline(file, result, ',');
         getline(file, time);
-        cout << name << "\t\t" << result << "\t\t" << time << endl;
+
+        cout << left << setw(15) << name
+             << setw(12) << result
+             << setw(10) << time << endl;
     }
 
     file.close();
